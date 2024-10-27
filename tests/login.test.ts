@@ -19,6 +19,7 @@ test.describe('Login Tests', () => {
     await expect(page.locator(selectors.emailError)).toHaveText('Enter your email address');
     await expect(page.locator(selectors.passwordError)).toHaveText('Enter your password');
   });
+  
 
   test('should show error message for invalid email or password', async ({ page }) => {
     await page.fill(selectors.email, 'invalid.risevestemail@yopmail.com');

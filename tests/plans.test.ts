@@ -38,6 +38,8 @@ test.describe('Plans Tests', () => {
     }
   });
 
+  //Revist
+
 //   test('Should create a new plan', async ({ page }) => {
 //     // Navigate to the plans page
 //     const plansLink = page.locator('div#root>div>div>a:nth-of-type(2)');

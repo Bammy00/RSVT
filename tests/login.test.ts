@@ -1,6 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import { LoginPage } from '../pages/login.page';
 
+
 test.describe('Login Tests', () => {
   const loginUrl = '/login';
   const dashboardUrl = '/';
@@ -36,7 +37,8 @@ test.describe('Login Tests', () => {
   });
 
   test('should toggle password visibility', async ({ page }) => {
-    await loginPage.login('', validPassword);
+    await loginPage.login('hello@email.com', validPassword);
+    await page.waitForTimeout(5000); // waits for 5 seconds
     await loginPage.togglePasswordVisibility();
     await expect(await loginPage.getPasswordInputType()).toBe('text');
     await loginPage.togglePasswordVisibility();

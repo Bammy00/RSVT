@@ -1,4 +1,4 @@
-// WalletPage.ts
+// page-objects/WalletPage.ts
 import { Page } from '@playwright/test';
 import { selectors } from '../utils/selectors';
 

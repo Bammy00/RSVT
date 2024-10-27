@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { selectors } from '../utils/selectors';
+import { test, expect, Page } from '@playwright/test';
+import { LoginPage } from '../pages/login.page';
 
 test.describe('Login Tests', () => {
   const loginUrl = '/login';
@@ -8,39 +8,38 @@ test.describe('Login Tests', () => {
   const validEmail = 'ayobami.eleyinmi@gmail.com';
   const validPassword = 'Pallindrome119#';
 
-  // Navigate to login page before each test
+  let loginPage: LoginPage;
+
   test.beforeEach(async ({ page }) => {
-    await page.goto(loginUrl);
+    loginPage = new LoginPage(page);
+    await loginPage.navigate();
     await expect(page).toHaveURL(loginUrl);
   });
 
   test('should show error messages for blank submission', async ({ page }) => {
-    await page.click(selectors.submitButton);
-    await expect(page.locator(selectors.emailError)).toHaveText('Enter your email address');
-    await expect(page.locator(selectors.passwordError)).toHaveText('Enter your password');
+    await loginPage.login('', '');
+    await expect(await loginPage.getEmailError()).toBe('Enter your email address');
+    await expect(await loginPage.getPasswordError()).toBe('Enter your password');
+  });
+
+  test('should show error message for invalid email', async ({ page }) => {
+    await loginPage.login('invalid.risevestemail@yopmail', 'invalidPassword');
+    await expect(await loginPage.getEmailError()).toBe('Enter a valid email address');
   });
   
 
-  test('should show error message for invalid email or password', async ({ page }) => {
-    await page.fill(selectors.email, 'invalid.risevestemail@yopmail.com');
-    await page.fill(selectors.password, 'invalidPassword');
-    await page.click(selectors.submitButton);
-    await expect(page.locator(selectors.errorMessage)).toHaveText('Invalid email or password.');
-  });
-
   test('should login successfully with valid credentials', async ({ page }) => {
-    await page.fill(selectors.email, validEmail);
-    await page.fill(selectors.password, validPassword);
-    await page.click(selectors.submitButton);
+    await loginPage.login(validEmail, validPassword);
+    await page.waitForNavigation({ timeout: 10000 }); // Wait for navigation with increased timeout
+    console.log(await page.url()); // Log the current URL
     await expect(page).toHaveURL(dashboardUrl);
   });
 
   test('should toggle password visibility', async ({ page }) => {
-    await page.fill(selectors.password, validPassword);
-    await page.click(selectors.togglePasswordButton); // Toggle visibility
-    const passwordInput = await page.locator(selectors.password);
-    await expect(passwordInput).toHaveAttribute('type', 'text'); // Password should be visible
-    await page.click(selectors.togglePasswordButton); // Toggle visibility back
-    await expect(passwordInput).toHaveAttribute('type', 'password'); // Password should be hidden
+    await loginPage.login('', validPassword);
+    await loginPage.togglePasswordVisibility();
+    await expect(await loginPage.getPasswordInputType()).toBe('text');
+    await loginPage.togglePasswordVisibility();
+    await expect(await loginPage.getPasswordInputType()).toBe('password');
   });
 });

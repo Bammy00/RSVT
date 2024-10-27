@@ -1,11 +1,14 @@
 import { login, clickRandomOption } from '../utils/helper';
 import { selectors } from '../utils/selectors';
 import { test, expect } from '@playwright/test';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 test.describe('Plans Tests', () => {
 
-  const validEmail = 'ayobami.eleyinmi@gmail.com';
-  const validPassword = 'Pallindrome119#';
+  const validEmail = process.env.VALID_EMAIL!;
+  const validPassword = process.env.VALID_PASSWORD!;
 
   // Navigate to login page before each test
   test.beforeEach(async ({ page }) => {

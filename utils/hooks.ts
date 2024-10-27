@@ -3,12 +3,15 @@ import { Page } from '@playwright/test';
 import { login } from '../utils/helper';
 import { WalletPage } from '../pages/wallet.page';
 import { LoginPage } from '../pages/login.page';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const loginUrl = '/login';
 const dashboardUrl = '/';
 
-const validEmail = 'ayobami.eleyinmi@gmail.com';
-const validPassword = 'Pallindrome119#';
+const validEmail = process.env.VALID_EMAIL!;
+const validPassword = process.env.VALID_PASSWORD!;
 
 export async function setupWallet(page: Page): Promise<WalletPage> {
   await page.goto(loginUrl);

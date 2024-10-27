@@ -2,7 +2,7 @@ name: Playwright
 
 on:
   schedule:
-    - cron: "0 */12 * * *" # This will run the tests every 12 hours
+    - cron: "0 */23 * * *" # This will run the tests every 12 hours
   push:
     branches: [main]
   pull_request:
